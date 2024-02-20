@@ -47,7 +47,7 @@ if streamlit.button('Add Fruit'):
         my_cur = my_cnx.cursor()
         # Instrucción SQL para insertar la nueva fruta
         try:
-            my_cur.execute("INSERT INTO fruit_load_list (name) VALUES (%s)", (new_fruit_name,))
+            my_cur.execute("INSERT INTO fruit_load_list (fruit_name) VALUES (%s)", (new_fruit_name,))
             streamlit.success(f"Added {new_fruit_name} to the list!")
         except Exception as e:
             streamlit.error(f"Error adding {new_fruit_name} to the list: {e}")
