@@ -34,3 +34,25 @@ my_cur.execute("SELECT * FROM fruit_load_list")
 my_data_row = my_cur.fetchall()
 streamlit.header("The fruit load list contains:")
 streamlit.dataframe(my_data_row)
+
+st.text("Add a New Fruit to the List")
+# Campo para que el usuario escriba el nombre de la fruta
+new_fruit_name = st.text_input('What fruit would you like to add?', '')
+# Botón para enviar la fruta
+if st.button('Add Fruit'):
+    # Verificar que el nombre de la fruta no esté vacío
+    if new_fruit_name:
+        # Conexión a Snowflake
+        my_cnx = snowflake.connector.connect(**st.secrets["snowflake"])
+        my_cur = my_cnx.cursor()
+        # Instrucción SQL para insertar la nueva fruta
+        try:
+            my_cur.execute("INSERT INTO fruit_load_list (name) VALUES (%s)", (new_fruit_name,))
+            st.success(f"Added {new_fruit_name} to the list!")
+        except Exception as e:
+            st.error(f"Error adding {new_fruit_name} to the list: {e}")
+        finally:
+            my_cur.close()
+            my_cnx.close()
+    else:
+        st.error("Please enter a fruit name.")
